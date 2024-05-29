@@ -10,8 +10,6 @@ set ( CMAKE_CXX_EXTENSIONS        OFF )
 #Source
 set(SOURCE_ONE_WEEKEND 
     src/InOneWeekend/main.cpp
-    
-    src/InOneWeekend/test.h
 )
 
 include_directories(src)

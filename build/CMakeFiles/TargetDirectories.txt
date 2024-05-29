@@ -1,3 +1,3 @@
-E:/TA_library/RayTracingProject/build/CMakeFiles/inOneWeekend.dir
-E:/TA_library/RayTracingProject/build/CMakeFiles/edit_cache.dir
-E:/TA_library/RayTracingProject/build/CMakeFiles/rebuild_cache.dir
+G:/Learing_Lib/Rendering/RayTracingProject/build/CMakeFiles/inOneWeekend.dir
+G:/Learing_Lib/Rendering/RayTracingProject/build/CMakeFiles/ALL_BUILD.dir
+G:/Learing_Lib/Rendering/RayTracingProject/build/CMakeFiles/ZERO_CHECK.dir

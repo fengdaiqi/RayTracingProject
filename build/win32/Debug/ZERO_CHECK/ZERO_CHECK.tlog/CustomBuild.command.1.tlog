@@ -1,0 +1,10 @@
+^G:\LEARING_LIB\RENDERING\RAYTRACINGPROJECT\BUILD\CMAKEFILES\7011A7E02A0D1F80EFF8DFB390B24155\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SG:/Learing_Lib/Rendering/RayTracingProject -BG:/Learing_Lib/Rendering/RayTracingProject/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file G:/Learing_Lib/Rendering/RayTracingProject/build/RayTracingProject.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
