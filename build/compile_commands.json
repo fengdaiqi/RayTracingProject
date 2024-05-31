@@ -1,8 +1,0 @@
-[
-{
-  "directory": "E:/TA_library/RayTracingProject/build",
-  "command": "C:\\MinGW\\bin\\g++.exe  @CMakeFiles/inOneWeekend.dir/includes_CXX.rsp -g -std=c++11 -o CMakeFiles\\inOneWeekend.dir\\src\\InOneWeekend\\main.cpp.obj -c E:\\TA_library\\RayTracingProject\\src\\InOneWeekend\\main.cpp",
-  "file": "E:/TA_library/RayTracingProject/src/InOneWeekend/main.cpp",
-  "output": "CMakeFiles/inOneWeekend.dir/src/InOneWeekend/main.cpp.obj"
-}
-]

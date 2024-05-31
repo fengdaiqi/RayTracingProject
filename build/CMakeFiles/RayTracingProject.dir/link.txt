@@ -1,3 +1,0 @@
-F:\Cmake\bin\cmake.exe -E rm -f CMakeFiles\RayTracingProject.dir/objects.a
-C:\MinGW\bin\ar.exe qc CMakeFiles\RayTracingProject.dir/objects.a @CMakeFiles\RayTracingProject.dir\objects1.rsp
-C:\MinGW\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\RayTracingProject.dir/objects.a -Wl,--no-whole-archive -o RayTracingProject.exe -Wl,--out-implib,libRayTracingProject.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\RayTracingProject.dir\linkLibs.rsp

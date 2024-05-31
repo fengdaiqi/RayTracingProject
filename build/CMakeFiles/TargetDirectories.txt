@@ -1,3 +1,0 @@
-G:/Learing_Lib/Rendering/RayTracingProject/build/CMakeFiles/inOneWeekend.dir
-G:/Learing_Lib/Rendering/RayTracingProject/build/CMakeFiles/ALL_BUILD.dir
-G:/Learing_Lib/Rendering/RayTracingProject/build/CMakeFiles/ZERO_CHECK.dir
