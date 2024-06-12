@@ -1,8 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
-
+#include "rtweekend.h"
 #include "hittable.h"
-#include "ray.h"
 
 // 在此处添加注释
 class sphere : public hittable
@@ -12,7 +11,7 @@ public:
     sphere(const point3 &center, double radius) : center(center), radius(fmax(0, radius)) {}
 
     // 计算 ray 与球相交的函数
-    bool hit(const ray &r, double ray_tmin, double ray_tmax, hit_record &rec) const override
+    bool hit(const ray &r, interval ray_t, hit_record &rec) const override
     {
         vec3 oc = center - r.origin();
         auto a = r.direction().length_squared();
@@ -26,10 +25,10 @@ public:
         auto sqrtd = sqrt(discriminant);
         auto root = (h - sqrtd) / a;
         // 这里的判断条件是 root 必须在 t_min 和 t_max 之间，否则就不是交点
-        if (root <= ray_tmin || ray_tmax <= root)
+        if (!ray_t.surrounds(root))
         {
             root = (h + sqrtd) / a;
-            if (root <= ray_tmin || ray_tmax <= root)
+            if (!ray_t.surrounds(root))
                 return false;
         }
 
