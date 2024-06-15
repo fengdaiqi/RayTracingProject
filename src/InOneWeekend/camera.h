@@ -11,6 +11,7 @@ public:
     double aspect_ratio = 16.0 / 9.0; // 图像宽高比
     int image_width = 400;            // 图像宽度
     int samples_per_pixel = 10;
+    int max_depth = 20;                // 最大递归深度
     void render(const hittable &world) // 渲染图像
     {
         initialize(); // 初始化相机参数
@@ -27,7 +28,7 @@ public:
                 for (int sample = 0; sample < samples_per_pixel; sample++) // 多次采样
                 {
                     ray r = get_ray(i, j);
-                    pixel_color += ray_color(r, world); // 计算像素颜色
+                    pixel_color += ray_color(r, max_depth, world); // 计算像素颜色
                 }
                 write_color(std::cout, pixel_color * pixel_sample_scale);
             }
@@ -93,14 +94,22 @@ private:
         return vec3(random_double() - 0.5, random_double() - 0.5, 0);
     }
 
-    color ray_color(const ray &r, const hittable &world) const // 计算光线颜色
+    color ray_color(const ray &r, int depth, const hittable &world) const // 计算光线颜色
     {
+        if (depth <= 0)            // 递归结束条件)
+            return color(0, 0, 0); // 无穷远处的颜色
         hit_record rec;
         // 检查光线是否与世界中的物体相交
-        if (world.hit(r, interval(0.0, infinity), rec))
+        // 如果光线与世界中的物体相交
+        // 当前注释的代码位于 Ray 类的成员函数 ray_color 中
+        // 该函数用于计算光线追踪中的颜色值
+        if (world.hit(r, interval(0.001, infinity), rec))
         {
-            // 如果相交，返回表面法线的颜色
-            return 0.5 * (rec.normal + vec3(1, 1, 1));
+            // 根据交点法线方向和随机生成的单位向量计算发射光线的方向
+            vec3 direction = rec.normal + random_unit_vector();
+
+            // 递归计算新发射光线的颜色，并返回结果的一半作为当前颜色的贡献
+            return 0.5 * ray_color(ray(rec.p, direction), depth - 1, world);
         }
         // 未与物体相交时的背景色
         vec3 unit_direction = unit_vector(r.direction());
