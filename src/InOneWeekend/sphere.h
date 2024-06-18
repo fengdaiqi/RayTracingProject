@@ -8,8 +8,8 @@ class sphere : public hittable
 {
 public:
     // 使用点和半径作为参数的构造函数
-    sphere(const point3 &center, double radius) : center(center), radius(fmax(0, radius)) {}
-
+    sphere(const point3 &center, double radius, shared_ptr<material> _material)
+        : center(center), radius(fmax(0, radius)), mat(_material) {}
     // 计算 ray 与球相交的函数
     bool hit(const ray &r, interval ray_t, hit_record &rec) const override
     {
@@ -36,12 +36,14 @@ public:
         rec.p = r.at(rec.t);
         vec3 outward_normal = (rec.p - center) / radius;
         rec.set_face_normal(r, outward_normal);
+        rec.mat_ptr = mat;
         return true;
     }
 
 private:
     point3 center;
     double radius;
+    shared_ptr<material> mat;
 };
 
 #endif

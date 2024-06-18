@@ -3,6 +3,7 @@
 
 #include "rtweekend.h"
 #include "hittable.h"
+#include "material.h"
 
 class camera
 {
@@ -103,13 +104,18 @@ private:
         // 如果光线与世界中的物体相交
         // 当前注释的代码位于 Ray 类的成员函数 ray_color 中
         // 该函数用于计算光线追踪中的颜色值
+        // 如果光线与物体相交
         if (world.hit(r, interval(0.001, infinity), rec))
         {
-            // 根据交点法线方向和随机生成的单位向量计算发射光线的方向
-            vec3 direction = rec.normal + random_unit_vector();
-
-            // 递归计算新发射光线的颜色，并返回结果的一半作为当前颜色的贡献
-            return 0.5 * ray_color(ray(rec.p, direction), depth - 1, world);
+            // 声明散射后的光线和衰减颜色
+            ray scattered;
+            color attenuation;
+            // 如果材质发生散射
+            if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+                // 递归计算散射后的光线颜色并返回
+                return attenuation * ray_color(scattered, depth - 1, world);
+            // 如果未发生散射，则返回黑色
+            return color(0, 0, 0);
         }
         // 未与物体相交时的背景色
         vec3 unit_direction = unit_vector(r.direction());

@@ -2,13 +2,16 @@
 #define HITTABLE_H
 #include "rtweekend.h"
 
+class material;
+
 class hit_record
 {
 public:
-    point3 p;
-    vec3 normal;
-    double t;
-    bool front_face;
+    point3 p;                     // 点的坐标
+    vec3 normal;                  // 法向量
+    double t;                     // 相交位置的参数
+    bool front_face;              // 是否为正面相交
+    shared_ptr<material> mat_ptr; // 材质指针
 
     void set_face_normal(const ray &r, const vec3 &outward_normal)
     {

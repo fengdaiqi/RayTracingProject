@@ -40,7 +40,6 @@ inline double random_double(double min, double max)
 
 // Common Headers
 // 通用头文件
-
 #include "color.h"
 #include "vec3.h"
 #include "ray.h"
