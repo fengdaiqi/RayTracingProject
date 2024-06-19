@@ -11,7 +11,7 @@ public:
     // 图像
     double aspect_ratio = 16.0 / 9.0; // 图像宽高比
     int image_width = 400;            // 图像宽度
-    int samples_per_pixel = 10;
+    int samples_per_pixel = 5;
     int max_depth = 20;                // 最大递归深度
     void render(const hittable &world) // 渲染图像
     {
