@@ -62,4 +62,52 @@ private:
     double fuzz;
 };
 
+class dielectric : public material
+{
+public:
+    // 构造函数，初始化折射率
+    dielectric(double refraction_index) : refraction_index(refraction_index) {}
+
+    // 散射光线的方法，根据入射光线和命中记录计算散射光线和衰减
+    bool scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered) const override
+    {
+        // 设置衰减颜色为白色
+        attenuation = color(1.0, 1.0, 1.0);
+        // 根据命中记录的前表面标志计算折射率
+        double ri = rec.front_face ? (1.0 / refraction_index) : refraction_index;
+        // 计算入射光线的单位方向向量
+        vec3 unit_direction = unit_vector(r_in.direction());
+        // 计算入射光线与法线的夹角的余弦值
+        double cos_theta = fmin(dot(-unit_direction, rec.normal), 1.0);
+        // 计算入射光线与法线的夹角的正弦值
+        double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+
+        // 判断是否无法折射
+        bool cannot_refract = ri * sin_theta > 1.0;
+        vec3 direction;
+
+        // 如果无法折射，则计算反射方向
+        if (cannot_refract || reflectance(cos_theta, ri) > random_double())
+            direction = reflect(unit_direction, rec.normal);
+        // 否则计算折射方向
+        else
+            direction = refract(unit_direction, rec.normal, ri);
+
+        // 设置散射光线
+        scattered = ray(rec.p, direction);
+        return true;
+    }
+
+private:
+    double refraction_index; // 折射率
+    // 计算反射率的方法
+    static double reflectance(double cosine, double ref_idx)
+    {
+        // Use Schlick's approximation for reflectance.
+        auto r0 = (1 - ref_idx) / (1 + ref_idx);
+        r0 = r0 * r0;
+        return r0 + (1 - r0) * pow((1 - cosine), 5);
+    }
+};
+
 #endif

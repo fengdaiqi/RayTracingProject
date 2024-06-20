@@ -163,11 +163,16 @@ inline vec3 reflect(const vec3 &v, const vec3 &n)
     return v - 2 * dot(v, n) * n;
 }
 
+// 计算折射向量的函数
 inline vec3 refract(const vec3 &uv, const vec3 &n, double etai_over_etat)
 {
+    // 计算入射向量与法线之间的夹角的余弦值，并取其最小值以确保数值稳定性
     auto cos_theta = fmin(dot(-uv, n), 1.0);
+    // 计算垂直于法线的折射分量
     vec3 r_out_perp = etai_over_etat * (uv + cos_theta * n);
+    // 计算平行于法线的折射分量
     vec3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.length_squared())) * n;
+    // 返回完整的折射向量
     return r_out_perp + r_out_parallel;
 }
 

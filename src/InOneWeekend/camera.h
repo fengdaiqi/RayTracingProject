@@ -13,6 +13,11 @@ public:
     int image_width = 400;            // 图像宽度
     int samples_per_pixel = 5;
     int max_depth = 20;                // 最大递归深度
+    double vfov = 90.0;                // 视场角
+    point3 lookfrom = point3(0, 0, 0); // Point camera is looking from
+    point3 lookat = point3(0, 0, -1);  // Point camera is looking at
+    vec3 vup = vec3(0, 1, 0);          // Camera-relative "up" direction
+
     void render(const hittable &world) // 渲染图像
     {
         initialize(); // 初始化相机参数
@@ -45,27 +50,34 @@ private:
     point3 pixel00_loc;              // 像素0,0的位置
     vec3 pixel_delta_u;              // 到右侧像素的偏移
     vec3 pixel_delta_v;              // 到下方像素的偏移
+    vec3 u, v, w;                    // Camera frame basis vectors
 
     void initialize() // 初始化相机参数
     {
-        image_height = int(image_width / aspect_ratio);       // 计算图像高度
-        image_height = (image_height < 1) ? 1 : image_height; // 设置最小高度为1
-        center = point3(0, 0, 0);                             // 设置相机中心
-        auto focal_length = 1.0;                              // 焦距
-        auto viewport_height = 2.0;                           // 视口高度
-        auto viewport_width = aspect_ratio * viewport_height; // 视口宽度
-        auto camera_center = point3(0, 0, 0);                 // 相机中心
+        image_height = int(image_width / aspect_ratio);        // 计算图像高度
+        image_height = (image_height < 1) ? 1 : image_height;  // 设置最小高度为1
+        center = lookfrom;                                     // 设置相机中心
+        auto focal_length = (lookfrom - lookat).length();      // 焦距
+        auto theta = degrees_to_radians(vfov);                 // 视场角
+        auto half_height = tan(theta / 2);                     // 半高
+        auto viewport_height = half_height * focal_length * 2; // 视口高度
+        auto viewport_width = aspect_ratio * viewport_height;  // 视口宽度
 
-        // 计算水平和垂直视口边缘的向量
-        auto viewport_u = vec3(viewport_width, 0, 0);
-        auto viewport_v = vec3(0, -viewport_height, 0);
+        w = unit_vector(lookfrom - lookat); // Calculate the u,v,w unit basis vectors for the camera coordinate frame.
+        u = unit_vector(cross(vup, w));
+        v = cross(w, u);
+        // Calculate the vectors across the horizontal and down the vertical viewport edges.
+        vec3 viewport_u = viewport_width * u;   // Vector across viewport horizontal edge
+        vec3 viewport_v = viewport_height * -v; // Vector down viewport vertical edge
+
+        auto camera_center = point3(0, 0, 0); // 相机中心
 
         // 计算从像素到像素的水平和垂直增量向量
         pixel_delta_u = viewport_u / image_width;
         pixel_delta_v = viewport_v / image_height;
 
         // 计算左上角像素的位置
-        auto viewport_upper_left = camera_center - vec3(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;
+        auto viewport_upper_left = center - (focal_length * w) - viewport_u / 2 - viewport_v / 2;
         pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
         pixel_sample_scale = 1.0 / samples_per_pixel; // 计算像素采样比例
