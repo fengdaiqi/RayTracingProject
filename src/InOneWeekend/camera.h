@@ -95,9 +95,10 @@ private:
         auto ray_origin = center;
         // 计算光线方向为像素采样点减去起点
         auto ray_direction = pixel_sample - ray_origin;
+        auto ray_time = random_double();
 
         // 返回光线
-        return ray(ray_origin, ray_direction);
+        return ray(ray_origin, ray_direction, ray_time);
     }
 
     // 生成一个随机单位正方形中的点

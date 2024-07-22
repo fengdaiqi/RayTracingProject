@@ -5,6 +5,8 @@
 #include "hittable_list.h"
 #include "material.h"
 #include "sphere.h"
+
+// 主函数
 int main()
 {
     hittable_list world;
@@ -28,11 +30,12 @@ int main()
                     // diffuse
                     auto albedo = color::random() * color::random();
                     sphere_material = make_shared<lambertian>(albedo);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
+                    auto center2 = center + vec3(0, random_double(0.5, 1.5), 0);
+                    world.add(make_shared<sphere>(center, center2, 0.4, sphere_material));
                 }
                 else if (choose_mat < 0.95)
                 {
-                    // metal
+                    // 金属材质
                     auto albedo = color::random(0.5, 1);
                     auto fuzz = random_double(0, 0.5);
                     sphere_material = make_shared<metal>(albedo, fuzz);
@@ -40,7 +43,7 @@ int main()
                 }
                 else
                 {
-                    // glass
+                    // 玻璃材质
                     sphere_material = make_shared<dielectric>(1.5);
                     world.add(make_shared<sphere>(center, 0.2, sphere_material));
                 }
@@ -48,6 +51,7 @@ int main()
         }
     }
 
+    // 添加三个特殊材质的球体
     auto material1 = make_shared<dielectric>(1.5);
     world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
 
@@ -57,17 +61,19 @@ int main()
     auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
     world.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
 
+    // 设置相机参数
     camera cam;
 
     cam.aspect_ratio = 16.0 / 9.0;
-    cam.image_width = 1200;
-    cam.samples_per_pixel = 500;
-    cam.max_depth = 50;
+    cam.image_width = 400;
+    cam.samples_per_pixel = 100;
+    cam.max_depth = 20;
 
     cam.vfov = 20;
     cam.lookfrom = point3(13, 2, 3);
     cam.lookat = point3(0, 0, 0);
     cam.vup = vec3(0, 1, 0);
 
+    // 渲染场景
     cam.render(world);
 }

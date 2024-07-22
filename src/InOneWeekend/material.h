@@ -31,7 +31,7 @@ public:
         if (scatter_direction.near_zero())
             scatter_direction = rec.normal;
         // 设置散射光线
-        scattered = ray(rec.p, scatter_direction);
+        scattered = ray(rec.p, scatter_direction, r_in.get_time());
         // 设置衰减值为材质的albedo属性
         attenuation = albedo;
         return true;
@@ -52,7 +52,7 @@ public:
         vec3 reflected = reflect(r_in.direction(), rec.normal);
         // 随机扰动反射方向
         reflected = unit_vector(reflected) + (fuzz * random_unit_vector());
-        scattered = ray(rec.p, reflected);
+        scattered = ray(rec.p, reflected, r_in.get_time());
         attenuation = albedo;
         return (dot(scattered.direction(), rec.normal) > 0);
     }
@@ -94,7 +94,7 @@ public:
             direction = refract(unit_direction, rec.normal, ri);
 
         // 设置散射光线
-        scattered = ray(rec.p, direction);
+        scattered = ray(rec.p, direction, r_in.get_time());
         return true;
     }
 
