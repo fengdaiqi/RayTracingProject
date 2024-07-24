@@ -25,6 +25,24 @@ src/InOneWeekend/vec3.h
 src/InOneWeekend/main.cpp
 )
 
+set(SOURCE_NEXT_WEEK 
+
+src/TheNextWeek/camera.h
+src/TheNextWeek/color.h
+src/TheNextWeek/hittable.h
+src/TheNextWeek/hittable_list.h
+src/TheNextWeek/interval.h
+src/TheNextWeek/material.h
+src/TheNextWeek/ray.h
+src/TheNextWeek/aabb.h
+
+src/TheNextWeek/rtweekend.h
+src/TheNextWeek/sphere.h
+src/TheNextWeek/vec3.h
+
+src/TheNextWeek/main.cpp
+)
+
 include_directories(src)
 
 message (STATUS "Compiler ID: " ${CMAKE_CXX_COMPILER_ID})
@@ -53,3 +71,4 @@ endif()
 
 
 add_executable(inOneWeekend       ${SOURCE_ONE_WEEKEND})
+add_executable(TheNextWeek       ${SOURCE_NEXT_WEEK})
