@@ -55,6 +55,8 @@ public:
         return true;
     }
 
+    aabb bounding_box() const override { return boundingBox; }
+
 private:
     point3 center1;
     double radius;

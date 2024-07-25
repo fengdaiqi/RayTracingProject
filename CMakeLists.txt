@@ -35,10 +35,11 @@ src/TheNextWeek/interval.h
 src/TheNextWeek/material.h
 src/TheNextWeek/ray.h
 src/TheNextWeek/aabb.h
-
+src/TheNextWeek/bvh.h
 src/TheNextWeek/rtweekend.h
 src/TheNextWeek/sphere.h
 src/TheNextWeek/vec3.h
+src/TheNextWeek/texture.h
 
 src/TheNextWeek/main.cpp
 )

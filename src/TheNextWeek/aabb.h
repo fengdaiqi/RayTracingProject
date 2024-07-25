@@ -38,8 +38,9 @@ public:
             return z;
         default:
             std::cerr << "Invalid axis index" << std::endl;
+            return x;
         }
-    };
+    }
     bool hit(const ray &r, interval ray_t) const
     {
         const point3 &ray_ori = r.origin();
@@ -70,5 +71,20 @@ public:
         }
         return true;
     }
+
+    int longest_axis() const
+    {
+        // return the index of the longest axis
+        if (x.size() > y.size())
+            return x.size() > z.size() ? 0 : 2;
+        else
+            return y.size() > z.size() ? 1 : 2;
+    }
+
+    static const aabb empty, universe;
 };
+
+const aabb aabb::empty = aabb(interval::empty, interval::empty, interval::empty);
+const aabb aabb::universe = aabb(interval::universe, interval::universe, interval::universe);
+
 #endif

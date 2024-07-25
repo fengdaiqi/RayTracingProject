@@ -11,6 +11,7 @@ public:
     point3 p;                     // 点的坐标
     vec3 normal;                  // 法向量
     double t;                     // 相交位置的参数
+    double u, v;                  // 纹理坐标
     bool front_face;              // 是否为正面相交
     shared_ptr<material> mat_ptr; // 材质指针
 

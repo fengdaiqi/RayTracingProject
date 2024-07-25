@@ -3,6 +3,7 @@
 
 #include "rtweekend.h"
 #include "hittable_list.h"
+#include "texture.h"
 
 // 材质基类
 class material
@@ -20,8 +21,8 @@ class lambertian : public material
 {
 public:
     // 构造函数，初始化albedo属性
-    lambertian(const color &albedo) : albedo(albedo) {}
-
+    lambertian(const color &albedo) : tex(make_shared<solid_color>(albedo)) {}
+    lambertian(shared_ptr<texture> tex) : tex(tex) {}
     // scatter方法重写自material类，计算漫反射光线的方向
     bool scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered) const override
     {
@@ -33,13 +34,14 @@ public:
         // 设置散射光线
         scattered = ray(rec.p, scatter_direction, r_in.get_time());
         // 设置衰减值为材质的albedo属性
-        attenuation = albedo;
+        attenuation = tex->value(rec.u, rec.v, rec.p);
         return true;
     }
 
 private:
     // 材质的颜色属性
-    color albedo;
+
+    shared_ptr<texture> tex;
 };
 
 class metal : public material
