@@ -47,6 +47,7 @@ src/TheNextWeek/vec3.h
 src/TheNextWeek/texture.h
 src/TheNextWeek/rtw_stb_image.h
 src/TheNextWeek/perlin.h
+src/TheNextWeek/quad.h
 
 src/TheNextWeek/main.cpp
 )
