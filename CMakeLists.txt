@@ -8,6 +8,11 @@ set ( CMAKE_CXX_STANDARD_REQUIRED ON )
 set ( CMAKE_CXX_EXTENSIONS        OFF )
 
 #Source
+
+set ( EXTERNAL
+  src/external/stb_image.h
+)
+
 set(SOURCE_ONE_WEEKEND 
 
 src/InOneWeekend/camera.h
@@ -26,7 +31,7 @@ src/InOneWeekend/main.cpp
 )
 
 set(SOURCE_NEXT_WEEK 
-
+src/external/stb_image.h
 src/TheNextWeek/camera.h
 src/TheNextWeek/color.h
 src/TheNextWeek/hittable.h
@@ -40,6 +45,8 @@ src/TheNextWeek/rtweekend.h
 src/TheNextWeek/sphere.h
 src/TheNextWeek/vec3.h
 src/TheNextWeek/texture.h
+src/TheNextWeek/rtw_stb_image.h
+src/TheNextWeek/perlin.h
 
 src/TheNextWeek/main.cpp
 )
