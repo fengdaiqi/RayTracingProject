@@ -13,6 +13,7 @@ public:
     int image_width = 400;            // 图像宽度
     int samples_per_pixel = 5;
     int max_depth = 20;                // 最大递归深度
+    color background;                  // 背景颜色
     double vfov = 90.0;                // 视场角
     point3 lookfrom = point3(0, 0, 0); // Point camera is looking from
     point3 lookat = point3(0, 0, -1);  // Point camera is looking at
@@ -108,32 +109,28 @@ private:
         return vec3(random_double() - 0.5, random_double() - 0.5, 0);
     }
 
-    color ray_color(const ray &r, int depth, const hittable &world) const // 计算光线颜色
+    color ray_color(const ray &r, int depth, const hittable &world) const
     {
-        if (depth <= 0)            // 递归结束条件)
-            return color(0, 0, 0); // 无穷远处的颜色
-        hit_record rec;
-        // 检查光线是否与世界中的物体相交
-        // 如果光线与世界中的物体相交
-        // 当前注释的代码位于 Ray 类的成员函数 ray_color 中
-        // 该函数用于计算光线追踪中的颜色值
-        // 如果光线与物体相交
-        if (world.hit(r, interval(0.001, infinity), rec))
-        {
-            // 声明散射后的光线和衰减颜色
-            ray scattered;
-            color attenuation;
-            // 如果材质发生散射
-            if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
-                // 递归计算散射后的光线颜色并返回
-                return attenuation * ray_color(scattered, depth - 1, world);
-            // 如果未发生散射，则返回黑色
+        // If we've exceeded the ray bounce limit, no more light is gathered.
+        if (depth <= 0)
             return color(0, 0, 0);
-        }
-        // 未与物体相交时的背景色
-        vec3 unit_direction = unit_vector(r.direction());
-        auto a = 0.5 * (unit_direction.y() + 1.0);
-        return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
+
+        hit_record rec;
+
+        // If the ray hits nothing, return the background color.
+        if (!world.hit(r, interval(0.001, infinity), rec))
+            return background;
+
+        ray scattered;
+        color attenuation;
+        color color_from_emission = rec.mat_ptr->emitted(rec.u, rec.v, rec.p);
+
+        if (!rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+            return color_from_emission;
+
+        color color_from_scatter = attenuation * ray_color(scattered, depth - 1, world);
+
+        return color_from_emission + color_from_scatter;
     }
 };
 

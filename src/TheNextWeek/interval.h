@@ -60,4 +60,14 @@ public:
 const interval interval::empty = interval(+infinity, -infinity);    // 空区间的定义
 const interval interval::universe = interval(-infinity, +infinity); // 全区间的定义
 
+interval operator+(const interval &ival, double displacement)
+{
+    return interval(ival.min + displacement, ival.max + displacement);
+}
+
+interval operator+(double displacement, const interval &ival)
+{
+    return ival + displacement;
+}
+
 #endif

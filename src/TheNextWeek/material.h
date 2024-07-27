@@ -12,6 +12,8 @@ public:
     // 虚析构函数
     virtual ~material() = default;
 
+    virtual color emitted(double u, double v, const point3 &p) const { return color(0, 0, 0); }
+
     // 散射函数，根据入射光线和击中记录计算散射后的衰减和散射光线
     virtual bool scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered) const = 0;
 };
@@ -110,6 +112,27 @@ private:
         r0 = r0 * r0;
         return r0 + (1 - r0) * pow((1 - cosine), 5);
     }
+};
+
+class diffuse_light : public material
+{
+public:
+    diffuse_light(shared_ptr<texture> tex) : tex(tex) {}
+    diffuse_light(const color &emit) : tex(make_shared<solid_color>(emit)) {}
+
+    bool scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered)
+        const override
+    {
+        return false;
+    }
+
+    color emitted(double u, double v, const point3 &p) const override
+    {
+        return tex->value(u, v, p);
+    }
+
+private:
+    shared_ptr<texture> tex;
 };
 
 #endif
